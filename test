@@ -28,7 +28,7 @@ public class ParsingStrings {
                 }
             }
             fileReader.close();
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e){
             System.out.println("File Not Found!");
         } catch (IOException e) {
             System.out.println("Can't read File");
