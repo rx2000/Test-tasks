@@ -75,11 +75,10 @@ public class ParsingStrings {
                             }
                         }
                     }
-
                 }
-
             }
         }
+        
         else{
 
             calendar1.setTime(sdf.parse(arrQueryData[0]));
@@ -103,12 +102,11 @@ public class ParsingStrings {
                                 }
                             }
                         }
-
                     }
                 }
-
             }
         }
+        
 
         if(sum != 0 && count !=0) {
                 result = String.valueOf(sum/count);
@@ -119,7 +117,4 @@ public class ParsingStrings {
 
 
     }
-
-
 }
-
