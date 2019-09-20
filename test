@@ -1,0 +1,124 @@
+package testgroup;
+
+import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+public class ParsingStrings {
+
+    public static void main(String[] args) throws ParseException {
+        System.out.println("Enter file address:");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        ArrayList<String> queryTime = new ArrayList<>();
+        ArrayList<String> query = new ArrayList<>();
+
+        try {
+            BufferedReader fileReader = new BufferedReader((new InputStreamReader(new FileInputStream(reader.readLine()))));
+
+            while (fileReader.ready()) {
+                String s = fileReader.readLine();
+                if(s.startsWith("C")) {
+                    queryTime.add(s);
+                }
+                if(s.startsWith("D")) {
+                    query.add(s);
+                }
+            }
+            fileReader.close();
+        }catch (FileNotFoundException e){
+            System.out.println("File Not Found!");
+        } catch (IOException e) {
+            System.out.println("Can't read File");
+        }
+
+
+        for (String s: query) {
+            System.out.println(parsString(s, queryTime));
+        }
+
+
+    }
+
+    public static String parsString(String s, ArrayList<String> queryTime) throws ParseException {
+        String result = "-";
+        int sum = 0;
+        int count = 0;
+        String[] arrQuery = s.split(" ");
+        String[] arrQueryData = arrQuery[4].split("-");
+
+        Calendar calendar1 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+
+
+        if(!s.contains("-")) {
+            calendar1.setTime(sdf.parse(arrQuery[4]));
+
+            for (String str: queryTime) {
+                Calendar calendar3 = Calendar.getInstance();
+
+                String[] arrQueryTime = str.split(" ");
+
+                calendar3.setTime(sdf.parse(arrQueryTime[4]));
+
+
+                if(calendar1.getTime().equals(calendar3.getTime())) {
+                    if(arrQuery[1].equals("*") || arrQueryTime[1].startsWith(arrQuery[1])){
+                        if(arrQuery[2].equals("*") || arrQueryTime[2].startsWith(arrQuery[2])){
+                            if(arrQuery[3].equals(arrQueryTime[3])) {
+                                sum = sum + Integer.parseInt(arrQueryTime[5]);
+                                count++;
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        }
+        else{
+
+            calendar1.setTime(sdf.parse(arrQueryData[0]));
+            calendar2.setTime(sdf.parse(arrQueryData[1]));
+
+            for (String str: queryTime) {
+                Calendar calendar3 = Calendar.getInstance();
+
+                String[] arrQueryTime = str.split(" ");
+
+                calendar3.setTime(sdf.parse(arrQueryTime[4]));
+
+
+                if(calendar1.getTime().compareTo(calendar3.getTime()) == 0 || calendar1.getTime().compareTo(calendar3.getTime()) < 0) {
+                    if (calendar2.getTime().compareTo(calendar3.getTime()) == 0 || calendar2.getTime().compareTo(calendar3.getTime()) > 0) {
+                        if (arrQuery[1].equals("*") || arrQueryTime[1].startsWith(arrQuery[1])) {
+                            if (arrQuery[2].equals("*") || arrQueryTime[2].startsWith(arrQuery[2])) {
+                                if (arrQuery[3].equals(arrQueryTime[3])) {
+                                    sum = sum + Integer.parseInt(arrQueryTime[5]);
+                                    count++;
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+            }
+        }
+
+        if(sum != 0 && count !=0) {
+                result = String.valueOf(sum/count);
+        }
+
+
+        return result;
+
+
+    }
+
+
+}
